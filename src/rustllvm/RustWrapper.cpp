@@ -99,7 +99,7 @@ extern "C" LLVMTypeRef LLVMMetadataTypeInContext(LLVMContextRef C) {
   return wrap(Type::getMetadataTy(*unwrap(C)));
 }
 
-extern "C" void LLVMAddCallSiteAttribute(LLVMValueRef Instr, unsigned index, uint64_t Val) {
+extern "C" void LLVMAddCallSiteAttribute2(LLVMValueRef Instr, unsigned index, uint64_t Val) {
   CallSite Call = CallSite(unwrap<Instruction>(Instr));
   AttrBuilder B;
   B.addRawValue(Val);
@@ -203,7 +203,7 @@ extern "C" LLVMValueRef LLVMBuildAtomicStore(LLVMBuilderRef B,
     return wrap(unwrap(B)->Insert(si));
 }
 
-extern "C" LLVMValueRef LLVMBuildAtomicCmpXchg(LLVMBuilderRef B,
+extern "C" LLVMValueRef LLVMBuildAtomicCmpXchg2(LLVMBuilderRef B,
                                                LLVMValueRef target,
                                                LLVMValueRef old,
                                                LLVMValueRef source,

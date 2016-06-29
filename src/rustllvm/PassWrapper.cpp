@@ -188,7 +188,7 @@ LLVMRustCreateTargetMachine(const char *triple,
     }
 
     TargetOptions Options;
-    Options.PositionIndependentExecutable = PositionIndependentExecutable;
+    //Options.PositionIndependentExecutable = PositionIndependentExecutable;
     Options.FloatABIType = FloatABI::Default;
     if (UseSoftFloat) {
         Options.FloatABIType = FloatABI::Soft;
@@ -267,7 +267,7 @@ LLVMRustAddLibraryInfo(LLVMPassManagerRef PMB,
 // similar code in clang's BackendUtil.cpp file.
 extern "C" void
 LLVMRustRunFunctionPassManager(LLVMPassManagerRef PM, LLVMModuleRef M) {
-    FunctionPassManager *P = unwrap<FunctionPassManager>(PM);
+    llvm::legacy::FunctionPassManager *P = unwrap<llvm::legacy::FunctionPassManager>(PM);
     P->doInitialization();
     for (Module::iterator I = unwrap(M)->begin(),
          E = unwrap(M)->end(); I != E; ++I)
@@ -294,7 +294,7 @@ LLVMRustWriteOutputFile(LLVMTargetMachineRef Target,
                         LLVMModuleRef M,
                         const char *path,
                         TargetMachine::CodeGenFileType FileType) {
-  PassManager *PM = unwrap<PassManager>(PMR);
+  llvm::legacy::PassManager *PM = unwrap<llvm::legacy::PassManager>(PMR);
 
   std::string ErrorInfo;
   std::error_code EC;
@@ -320,7 +320,7 @@ extern "C" void
 LLVMRustPrintModule(LLVMPassManagerRef PMR,
                     LLVMModuleRef M,
                     const char* path) {
-  PassManager *PM = unwrap<PassManager>(PMR);
+  llvm::legacy::PassManager *PM = unwrap<llvm::legacy::PassManager>(PMR);
   std::string ErrorInfo;
 
   std::error_code EC;
@@ -358,9 +358,8 @@ LLVMRustAddAlwaysInlinePass(LLVMPassManagerBuilderRef PMB, bool AddLifetimes) {
 
 extern "C" void
 LLVMRustRunRestrictionPass(LLVMModuleRef M, char **symbols, size_t len) {
-    PassManager passes;
-    ArrayRef<const char*> ref(symbols, len);
-    passes.add(llvm::createInternalizePass(ref));
+    llvm::legacy::PassManager passes;
+    passes.add(llvm::createInternalizePass());
     passes.run(*unwrap(M));
 }
 

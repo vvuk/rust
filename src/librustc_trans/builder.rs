@@ -1083,7 +1083,7 @@ impl<'a, 'tcx> Builder<'a, 'tcx> {
                          failure_order: AtomicOrdering,
                          weak: llvm::Bool) -> ValueRef {
         unsafe {
-            llvm::LLVMBuildAtomicCmpXchg(self.llbuilder, dst, cmp, src,
+            llvm::LLVMBuildAtomicCmpXchg2(self.llbuilder, dst, cmp, src,
                                          order, failure_order, weak)
         }
     }
