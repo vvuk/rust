@@ -359,7 +359,17 @@ LLVMRustAddAlwaysInlinePass(LLVMPassManagerBuilderRef PMB, bool AddLifetimes) {
 extern "C" void
 LLVMRustRunRestrictionPass(LLVMModuleRef M, char **symbols, size_t len) {
     llvm::legacy::PassManager passes;
-    passes.add(llvm::createInternalizePass());
+
+    auto PreserveFunctions = [=](const GlobalValue &GV) {
+        for (size_t i=0; i<len; i++) {
+            if (GV.getName() == symbols[i]) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    passes.add(llvm::createInternalizePass(PreserveFunctions));
     passes.run(*unwrap(M));
 }
 
