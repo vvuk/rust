@@ -153,9 +153,8 @@ pub fn compiler_rt(build: &Build, target: &str) {
         let target = format!("clang_rt.builtins-{}", arch);
         ("windows".to_string(), target.clone(), target)
     } else if target.contains("windows-msvc") {
-        (format!("windows/{}", mode),
-         "lib/builtins/builtins".to_string(),
-         format!("clang_rt.builtins-{}", arch.replace("i686", "i386")))
+        let target = format!("clang_rt.builtins-{}", arch.replace("i686", "i386"));
+        ("windows".to_string(), target.clone(), target)
     } else {
         panic!("can't get os from target: {}", target)
     };
@@ -177,7 +176,6 @@ pub fn compiler_rt(build: &Build, target: &str) {
        .define("LLVM_CONFIG_PATH", build_llvm_config)
        .define("COMPILER_RT_DEFAULT_TARGET_TRIPLE", target)
        .define("COMPILER_RT_BUILD_SANITIZERS", "OFF")
-       .define("COMPILER_RT_BUILD_EMUTLS", "OFF")
        // inform about c/c++ compilers, the c++ compiler isn't actually used but
        // it's needed to get the initial configure to work on all platforms.
        .define("CMAKE_C_COMPILER", build.cc(target))
