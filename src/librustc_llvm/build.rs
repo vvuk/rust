@@ -137,6 +137,8 @@ fn main() {
             &lib[2..]
         } else if lib.starts_with("-") {
             &lib[1..]
+        } else if lib.ends_with(".lib") {
+            &lib[0..lib.len()-4]
         } else {
             continue;
         };
