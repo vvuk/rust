@@ -61,7 +61,7 @@ pub fn llvm(build: &Build, target: &str) {
     cfg.target(target)
        .host(&build.config.build)
        .out_dir(&dst)
-       .profile(if build.config.llvm_optimize {"Release"} else {"Debug"})
+       .profile(if build.config.llvm_optimize {"RelWithDebInfo"} else {"Debug"})
        .define("LLVM_ENABLE_ASSERTIONS", assertions)
        .define("LLVM_TARGETS_TO_BUILD", "X86;ARM;AArch64;Mips;PowerPC")
        .define("LLVM_INCLUDE_EXAMPLES", "OFF")
